@@ -1,0 +1,91 @@
+<div class="titulo-container">
+  <h1>Rentas Disponibles</h1>
+</div>
+
+<div class="barra-busqueda-container">
+  <input 
+    type="text" 
+    [(ngModel)]="terminoBusqueda" 
+    (ngModelChange)="buscarRentas()"
+    placeholder="Buscar rentas...">
+</div>
+
+<!-- Botón para colapsar los filtros -->
+<button (click)="toggleFiltros()" class="boton-filtros">
+  {{ mostrarFiltros ? 'Ocultar Filtros' : 'Mostrar Filtros' }}
+</button>
+
+<div class="filtros-container" *ngIf="mostrarFiltros">
+  <h2>Filtros</h2>
+  <div>
+    <label for="tipo">Tipo:</label>
+    <select id="tipo" [(ngModel)]="filtroTipo" (change)="filtrarRentas()">
+      <option value="">Todos</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+    </select>
+  </div>
+  
+  <div>
+    <label for="precio">Precio máximo:</label>
+    <input type="number" id="precio" [(ngModel)]="filtroPrecio" (input)="filtrarRentas()" placeholder="Ej. 15000">
+  </div>
+  
+  <div>
+    <label for="ubicacion">Ubicación:</label>
+    <input type="text" id="ubicacion" [(ngModel)]="filtroUbicacion" (input)="filtrarRentas()" placeholder="Ej. Mérida">
+  </div>
+
+  <div>
+    <label for="estado">Estado:</label>
+    <select id="estado" [(ngModel)]="filtroEstado" (change)="filtrarRentas()">
+      <option value="">Todos</option>
+      <option value="disponible">Disponible</option>
+      <option value="ocupado">Ocupado</option>
+    </select>
+  </div>
+</div>
+
+<div class="rentas-grid">
+  <div *ngFor="let renta of rentasPaginadas" class="renta-card">
+    <img [src]="renta.imagen" [alt]="renta.titulo" class="renta-imagen">
+    <div class="etiquetas">
+      <span *ngIf="renta.amueblado" class="etiqueta amueblado">AMUEBLADO</span>
+      <span *ngIf="renta.mascotasPermitidas" class="etiqueta mascotas">MASCOTAS</span>
+      <span [ngClass]="{'etiqueta': true, 'disponible': !renta.ocupado, 'ocupado': renta.ocupado}">
+        {{ renta.ocupado ? 'OCUPADO' : 'DISPONIBLE' }}
+      </span>
+    </div>
+    <div class="renta-info">
+      <h2>{{ renta.precioMensual | currency:'MXN':'symbol':'1.0-0' }}/mes</h2>
+      <h3>{{ renta.titulo }}</h3>
+      <p>{{ renta.ubicacion }}</p>
+      <div class="caracteristicas">
+        <span>{{ renta.habitaciones }} 🛏️</span>
+        <span>{{ renta.banos }} 🚽</span>
+        <span>{{ renta.superficie }} m²</span>
+      </div>
+      <p class="tipo">{{ renta.tipo }}</p>
+      <div class="propietario-info">
+        <span>{{ renta.propietario }}</span>
+        <span>Disponible: {{ renta.fechaDisponibilidad }}</span>
+      </div>
+    </div>
+    <div class="mapa-container">
+      <iframe 
+        [src]="renta.safeMapaUrl" 
+        width="100%" 
+        height="150" 
+        frameborder="0" 
+        scrolling="no" 
+        marginheight="0" 
+        marginwidth="0">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<div class="paginacion">
+  <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
+  <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+  <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+</div>

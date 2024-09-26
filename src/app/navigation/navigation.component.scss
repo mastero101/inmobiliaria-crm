@@ -1,0 +1,47 @@
+.sidenav-container {
+    height: 100vh;
+  }
+  
+  .sidenav {
+    width: 200px;
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .sidenav.collapsed {
+    width: 60px;
+  }
+  
+  mat-nav-list {
+    padding-top: 20px;
+  }
+  
+  .mat-list-item {
+    margin-bottom: 10px;
+  }
+  
+  .mat-icon {
+    margin-right: 15px;
+  }
+  
+  .app-title {
+    margin-left: 20px;
+    font-size: 1.2em;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  .active {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 600px) {
+    .sidenav {
+      width: 0;
+    }
+    
+    .sidenav.expanded {
+      width: 200px;
+    }
+  }

@@ -1,0 +1,79 @@
+<div class="titulo-container">
+  <h1>Propiedades</h1>
+</div>
+
+<div class="barra-busqueda-container">
+  <input 
+    type="text" 
+    [(ngModel)]="terminoBusqueda" 
+    (ngModelChange)="buscarPropiedades()"
+    placeholder="Buscar propiedades...">
+</div>
+
+<!-- Botón para colapsar los filtros -->
+<button (click)="toggleFiltros()" class="boton-filtros">
+  {{ mostrarFiltros ? 'Ocultar Filtros' : 'Mostrar Filtros' }}
+</button>
+
+<div class="filtros-container" *ngIf="mostrarFiltros">
+  <h2>Filtros</h2>
+  <div>
+    <label for="tipo">Tipo:</label>
+    <select id="tipo" [(ngModel)]="filtroTipo" (change)="filtrarPropiedades()">
+      <option value="">Todos</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+    </select>
+  </div>
+  
+  <div>
+    <label for="precio">Precio máximo:</label>
+    <input type="number" id="precio" [(ngModel)]="filtroPrecio" (input)="filtrarPropiedades()" placeholder="Ej. 1000000">
+  </div>
+  
+  <div>
+    <label for="ubicacion">Ubicación:</label>
+    <input type="text" id="ubicacion" [(ngModel)]="filtroUbicacion" (input)="filtrarPropiedades()" placeholder="Ej. Mérida">
+  </div>
+</div>
+
+<div class="propiedades-grid">
+  <div *ngFor="let propiedad of propiedadesPaginadas" class="propiedad-card">
+    <img [src]="propiedad.imagen" [alt]="propiedad.titulo" class="propiedad-imagen">
+    <div class="etiquetas">
+      <span *ngIf="propiedad.destacado" class="etiqueta destacado">DESTACADO</span>
+      <span *ngIf="propiedad.vendida" class="etiqueta vendida">VENDIDA</span>
+    </div>
+    <div class="propiedad-info">
+      <h2>{{ propiedad.precio | currency:'MXN':'symbol':'1.0-0' }}</h2>
+      <h3>{{ propiedad.titulo }}</h3>
+      <p>{{ propiedad.ubicacion }}</p>
+      <div class="caracteristicas">
+        <span>{{ propiedad.habitaciones }} 🛏️</span>
+        <span>{{ propiedad.banos }} 🚽</span>
+        <span>{{ propiedad.superficie }} m²</span>
+      </div>
+      <p class="tipo">{{ propiedad.tipo }}</p>
+      <div class="vendedor-info">
+        <span>{{ propiedad.vendedor }}</span>
+        <span>Publicado: {{ propiedad.fechaPublicacion }}</span>
+      </div>
+    </div>
+    <div class="mapa-container">
+      <iframe 
+        [src]="propiedad.safeMapaUrl" 
+        width="100%" 
+        height="150" 
+        frameborder="0" 
+        scrolling="no" 
+        marginheight="0" 
+        marginwidth="0">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<div class="paginacion">
+  <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
+  <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+  <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+</div>

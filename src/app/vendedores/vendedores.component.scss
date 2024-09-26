@@ -1,0 +1,77 @@
+.vendedores-container {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  button[mat-raised-button] {
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    padding: 5px 0;
+  }
+
+  // Media query para pantallas pequeñas
+  @media (max-width: 600px) {
+    .mat-elevation-z8 {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    th.mat-header-cell, td.mat-cell {
+      padding: 8px 16px;
+      white-space: nowrap;
+    }
+
+    .mat-header-cell, .mat-cell {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .mat-header-row, .mat-row {
+      display: block;
+    }
+
+    .mat-header-cell, .mat-cell {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .mat-header-cell:last-child, .mat-cell:last-child {
+      border-bottom: none;
+    }
+
+    .mat-header-cell {
+      font-weight: bold;
+    }
+
+    .mat-cell {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mat-cell button {
+      margin-left: 8px;
+    }
+  }
+}
