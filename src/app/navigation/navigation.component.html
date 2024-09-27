@@ -5,26 +5,32 @@
                class="sidenav">
     <mat-nav-list>
       <a mat-list-item routerLink="/clientes" routerLinkActive="active">
-        <mat-icon matListItemIcon>people</mat-icon>
-        <span matListItemTitle *ngIf="isExpanded">Clientes</span>
+        <mat-icon>people</mat-icon>
+        <span *ngIf="isExpanded">Clientes</span>
       </a>
       <a mat-list-item routerLink="/vendedores" routerLinkActive="active">
-        <mat-icon matListItemIcon>business_center</mat-icon>
-        <span matListItemTitle *ngIf="isExpanded">Vendedores</span>
+        <mat-icon>business_center</mat-icon>
+        <span *ngIf="isExpanded">Vendedores</span>
       </a>
       <a mat-list-item routerLink="/propiedades" routerLinkActive="active">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <span matListItemTitle *ngIf="isExpanded">Propiedades</span>
+        <mat-icon>home</mat-icon>
+        <span *ngIf="isExpanded">Propiedades</span>
       </a>
       <a mat-list-item routerLink="/rentas" routerLinkActive="active">
-        <mat-icon matListItemIcon>attach_money</mat-icon>
-        <span matListItemTitle *ngIf="isExpanded">Rentas</span>
+        <mat-icon>attach_money</mat-icon>
+        <span *ngIf="isExpanded">Rentas</span>
       </a>
+      <li *ngIf="isLoggedIn()">
+        <button mat-button (click)="logout()">Logout</button>
+      </li>
+      <li *ngIf="!isLoggedIn()">
+        <a mat-button routerLink="/login">Login</a>
+      </li>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button mat-icon-button (click)="toggleMenu()" aria-label="Toggle menu">
+      <button mat-icon-button (click)="toggleMenu()">
         <mat-icon>{{ isExpanded ? 'menu_open' : 'menu' }}</mat-icon>
       </button>
       <span class="app-title">Inmobiliaria CRM</span>
@@ -34,3 +40,17 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+<nav>
+  <ul>
+    <li><a routerLink="/clientes">Clientes</a></li>
+    <li><a routerLink="/vendedores">Vendedores</a></li>
+    <li><a routerLink="/propiedades">Propiedades</a></li>
+    <li><a routerLink="/rentas">Rentas</a></li>
+    <li *ngIf="isLoggedIn()">
+      <button (click)="logout()">Logout</button>
+    </li>
+    <li *ngIf="!isLoggedIn()">
+      <a routerLink="/login">Login</a>
+    </li>
+  </ul>
+</nav>

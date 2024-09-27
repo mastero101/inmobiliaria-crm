@@ -9,7 +9,7 @@ import { NavigationComponent } from './navigation/navigation.component';
   imports: [
     CommonModule,
     RouterOutlet,
-    NavigationComponent
+    NavigationComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

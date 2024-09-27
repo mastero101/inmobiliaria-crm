@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -23,100 +24,15 @@ import { MatSidenav } from '@angular/material/sidenav';
     RouterLink,
     RouterLinkActive
   ],
-  template: `
-    <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'"
-                   [opened]="!isMobile && isExpanded" 
-                   [ngClass]="{'expanded': isExpanded, 'collapsed': !isExpanded}"
-                   class="sidenav">
-        <mat-nav-list>
-          <a mat-list-item routerLink="/clientes" routerLinkActive="active">
-            <mat-icon>people</mat-icon>
-            <span *ngIf="isExpanded">Clientes</span>
-          </a>
-          <a mat-list-item routerLink="/vendedores" routerLinkActive="active">
-            <mat-icon>business_center</mat-icon>
-            <span *ngIf="isExpanded">Vendedores</span>
-          </a>
-          <a mat-list-item routerLink="/propiedades" routerLinkActive="active">
-            <mat-icon>home</mat-icon>
-            <span *ngIf="isExpanded">Propiedades</span>
-          </a>
-          <a mat-list-item routerLink="/rentas" routerLinkActive="active">
-            <mat-icon>attach_money</mat-icon>
-            <span *ngIf="isExpanded">Rentas</span>
-          </a>
-        </mat-nav-list>
-      </mat-sidenav>
-      <mat-sidenav-content>
-        <mat-toolbar color="primary">
-          <button mat-icon-button (click)="toggleMenu()">
-            <mat-icon>{{ isExpanded ? 'menu_open' : 'menu' }}</mat-icon>
-          </button>
-          <span class="app-title">Inmobiliaria CRM</span>
-        </mat-toolbar>
-        <div class="content">
-          <router-outlet></router-outlet>
-        </div>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-  `,
-  styles: [`
-    .sidenav-container {
-      height: 100vh;
-    }
-    
-    .sidenav {
-      width: 200px;
-      transition: width 0.3s ease-in-out;
-    }
-    
-    .sidenav.collapsed {
-      width: 60px;
-    }
-    
-    mat-nav-list {
-      padding-top: 20px;
-    }
-    
-    .mat-list-item {
-      margin-bottom: 10px;
-    }
-    
-    .mat-icon {
-      margin-right: 15px;
-    }
-    
-    .app-title {
-      margin-left: 20px;
-      font-size: 1.2em;
-    }
-    
-    .content {
-      padding: 20px;
-    }
-    
-    .active {
-      background-color: rgba(0, 0, 0, 0.1);
-    }
-    
-    @media (max-width: 600px) {
-      .sidenav {
-        width: 0;
-      }
-      
-      .sidenav.expanded {
-        width: 200px;
-      }
-    }
-  `]
+  templateUrl: './navigation.component.html',
+  styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isExpanded = true;
   isMobile = false;
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService) {
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
         this.isMobile = result.matches;
@@ -142,5 +58,13 @@ export class NavigationComponent {
     if (this.isMobile) {
       this.sidenav.toggle();
     }
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
+
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn(); // Verifica si el usuario está autenticado
   }
 }
