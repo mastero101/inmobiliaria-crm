@@ -1,0 +1,61 @@
+<div class="container">
+  <h2>Administrar Propiedades</h2>
+  
+  <input type="text" placeholder="Buscar propiedades..." (input)="filtrarPropiedades($event)">
+  <button (click)="mostrarFiltros()">{{ showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros' }}</button>
+
+  <div *ngIf="showFilters" class="filtros">
+    <label>
+      Tipo:
+      <select formControlName="tipo">
+        <option value="">Todos</option>
+        <option value="casa">Casa</option>
+        <option value="departamento">Departamento</option>
+        <option value="comercial">Comercial</option>
+      </select>
+    </label>
+    <!-- Agrega más filtros según sea necesario -->
+  </div>
+
+  <div class="propiedades-list">
+    <h3>Lista de Propiedades</h3>
+    <div class="propiedad-card" *ngFor="let propiedad of propiedadesFiltradas; let i = index">
+      <div class="propiedad-info">
+        <h4>{{ propiedad.titulo }}</h4>
+        <p>Precio: {{ propiedad.precio }}</p>
+        <p>Ubicación: {{ propiedad.ubicacion }}</p>
+        <p>Habitaciones: {{ propiedad.habitaciones }}</p>
+        <p>Baños: {{ propiedad.banos }}</p>
+        <p>Superficie: {{ propiedad.superficie }} m²</p>
+        <p>Tipo: {{ propiedad.tipo }}</p>
+        <p>Vendedor: {{ propiedad.vendedor }}</p>
+        <p>Fecha de Publicación: {{ propiedad.fechaPublicacion }}</p>
+      </div>
+      <div class="propiedad-actions">
+        <button (click)="editarPropiedad(i)">Editar</button>
+        <button (click)="eliminarPropiedad(i)">Eliminar</button>
+      </div>
+    </div>
+
+    <!-- Tarjeta para crear una nueva propiedad -->
+    <div class="propiedad-card nueva-propiedad" (click)="resetForm()">
+      <h4>Agregar Nueva Propiedad</h4>
+      <p>Haz clic aquí para agregar una nueva propiedad.</p>
+    </div>
+  </div>
+
+  <!-- Mostrar el formulario solo si se está editando o agregando -->
+  <form *ngIf="isEditing" [formGroup]="propiedadForm" (ngSubmit)="guardarPropiedad()" class="formulario">
+    <h3>Nueva Propiedad</h3>
+    <input formControlName="titulo" placeholder="Título" required>
+    <input formControlName="precio" placeholder="Precio" required>
+    <input formControlName="ubicacion" placeholder="Ubicación" required>
+    <input formControlName="habitaciones" placeholder="Habitaciones" required>
+    <input formControlName="banos" placeholder="Baños" required>
+    <input formControlName="superficie" placeholder="Superficie" required>
+    <input formControlName="tipo" placeholder="Tipo" required>
+    <input formControlName="vendedor" placeholder="Vendedor" required>
+    <input formControlName="fechaPublicacion" placeholder="Fecha de Publicación" required>
+    <button type="submit">Guardar</button>
+  </form>
+</div>

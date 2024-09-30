@@ -16,6 +16,10 @@
         <mat-icon>home</mat-icon>
         <span *ngIf="isExpanded">Propiedades</span>
       </a>
+      <a mat-list-item routerLink="/propiedades-form" routerLinkActive="active"> 
+        <mat-icon>add</mat-icon>
+        <span *ngIf="isExpanded">Modificar</span> 
+      </a>
       <a mat-list-item routerLink="/rentas" routerLinkActive="active">
         <mat-icon>attach_money</mat-icon>
         <span *ngIf="isExpanded">Rentas</span>
@@ -40,17 +44,3 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-<nav>
-  <ul>
-    <li><a routerLink="/clientes">Clientes</a></li>
-    <li><a routerLink="/vendedores">Vendedores</a></li>
-    <li><a routerLink="/propiedades">Propiedades</a></li>
-    <li><a routerLink="/rentas">Rentas</a></li>
-    <li *ngIf="isLoggedIn()">
-      <button (click)="logout()">Logout</button>
-    </li>
-    <li *ngIf="!isLoggedIn()">
-      <a routerLink="/login">Login</a>
-    </li>
-  </ul>
-</nav>

@@ -1,0 +1,76 @@
+.container {
+  max-width: 800px; /* Ancho máximo del contenedor */
+  margin: 0 auto; /* Centrar el contenedor */
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center; /* Centrar el título */
+  color: #4A4A4A;
+}
+
+input[type="text"], 
+input[type="number"], 
+select {
+  width: 100%; /* Ancho completo */
+  padding: 10px;
+  margin: 10px 0; /* Espaciado vertical */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Incluir padding y border en el ancho total */
+}
+
+button {
+  width: 100%; /* Ancho completo */
+  padding: 10px;
+  background-color: #4CAF50; /* Color de fondo */
+  color: white; /* Color del texto */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px; /* Espaciado superior */
+  transition: background-color 0.3s; /* Transición suave */
+}
+
+button:hover {
+  background-color: #45a049; /* Color al pasar el mouse */
+}
+
+.propiedades-list {
+  margin-top: 20px;
+
+  .propiedad-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column; /* Colocar elementos en columna */
+    align-items: center; /* Centrar elementos horizontalmente */
+    text-align: center; /* Centrar texto */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .nueva-propiedad {
+    cursor: pointer;
+    color: #4CAF50;
+    border: 2px dashed #4CAF50;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #e8f5e9; /* Color al pasar el mouse */
+    }
+  }
+}
+
+.filtros {
+  margin: 20px 0; /* Espaciado vertical */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f1f1f1; /* Color de fondo para filtros */
+}
