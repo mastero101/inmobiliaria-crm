@@ -1,24 +1,37 @@
 <div class="container">
-  <h2>Administrar Propiedades</h2>
+  <h2 class="titulo">Administrar Propiedades</h2>
   
-  <input type="text" placeholder="Buscar propiedades..." (input)="filtrarPropiedades($event)">
-  <button (click)="mostrarFiltros()">{{ showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros' }}</button>
+  <input type="text" class="buscador" placeholder="Buscar propiedades..." (input)="filtrarPropiedades($event)">
+  <button class="btn-filtros" (click)="mostrarFiltros()">{{ showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros' }}</button>
 
   <div *ngIf="showFilters" class="filtros">
-    <label>
-      Tipo:
-      <select formControlName="tipo">
-        <option value="">Todos</option>
-        <option value="casa">Casa</option>
-        <option value="departamento">Departamento</option>
-        <option value="comercial">Comercial</option>
-      </select>
-    </label>
-    <!-- Agrega más filtros según sea necesario -->
+    <label for="tipoFiltro">Tipo:</label>
+    <select id="tipoFiltro" formControlName="tipo" class="select-filtro">
+      <option value="" disabled selected>Seleccionar Tipo</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+    </select>
+    
+    <label for="habitacionesFiltro">Habitaciones:</label>
+    <select id="habitacionesFiltro" formControlName="habitaciones" class="select-filtro">
+      <option value="" disabled selected>Seleccionar Habitaciones</option>
+      <option *ngFor="let num of [].constructor(11); let i = index" [value]="i">{{ i }}</option>
+    </select>
+
+    <label for="banosFiltro">Baños:</label>
+    <select id="banosFiltro" formControlName="banos" class="select-filtro">
+      <option value="" disabled selected>Seleccionar Baños</option>
+      <option *ngFor="let num of [].constructor(11); let i = index" [value]="i">{{ i }}</option>
+    </select>
+
+    <label for="superficieFiltro">Superficie (m²):</label>
+    <input type="number" id="superficieFiltro" formControlName="superficie" class="input-form" min="0" max="1000" placeholder="Superficie (m²)" required>
+
+    <label for="fechaPublicacionFiltro">Fecha de Publicación:</label>
+    <input type="date" id="fechaPublicacionFiltro" formControlName="fechaPublicacion" class="input-form" required>
   </div>
 
   <div class="propiedades-list">
-    <h3>Lista de Propiedades</h3>
+    <h3 class="subtitulo">Lista de Propiedades</h3>
     <div class="propiedad-card" *ngFor="let propiedad of propiedadesFiltradas; let i = index">
       <div class="propiedad-info">
         <h4>{{ propiedad.titulo }}</h4>
@@ -32,30 +45,51 @@
         <p>Fecha de Publicación: {{ propiedad.fechaPublicacion }}</p>
       </div>
       <div class="propiedad-actions">
-        <button (click)="editarPropiedad(i)">Editar</button>
-        <button (click)="eliminarPropiedad(i)">Eliminar</button>
+        <button class="btn-editar" (click)="editarPropiedad(i)">Editar</button>
+        <button class="btn-eliminar" (click)="eliminarPropiedad(i)">Eliminar</button>
       </div>
     </div>
 
-    <!-- Tarjeta para crear una nueva propiedad -->
     <div class="propiedad-card nueva-propiedad" (click)="resetForm()">
       <h4>Agregar Nueva Propiedad</h4>
       <p>Haz clic aquí para agregar una nueva propiedad.</p>
     </div>
   </div>
 
-  <!-- Mostrar el formulario solo si se está editando o agregando -->
   <form *ngIf="isEditing" [formGroup]="propiedadForm" (ngSubmit)="guardarPropiedad()" class="formulario">
-    <h3>Nueva Propiedad</h3>
-    <input formControlName="titulo" placeholder="Título" required>
-    <input formControlName="precio" placeholder="Precio" required>
-    <input formControlName="ubicacion" placeholder="Ubicación" required>
-    <input formControlName="habitaciones" placeholder="Habitaciones" required>
-    <input formControlName="banos" placeholder="Baños" required>
-    <input formControlName="superficie" placeholder="Superficie" required>
-    <input formControlName="tipo" placeholder="Tipo" required>
-    <input formControlName="vendedor" placeholder="Vendedor" required>
-    <input formControlName="fechaPublicacion" placeholder="Fecha de Publicación" required>
-    <button type="submit">Guardar</button>
+    <h3 class="subtitulo">Nueva Propiedad</h3>
+    
+    <input formControlName="titulo" class="input-form" placeholder="Título" required>
+    <input formControlName="precio" class="input-form" placeholder="Precio" required>
+    <input formControlName="ubicacion" class="input-form" placeholder="Ubicación" required>
+    
+    <label for="habitaciones">Habitaciones:</label>
+    <select id="habitaciones" formControlName="habitaciones" class="select-filtro">
+      <option value="" disabled selected>Seleccionar Habitaciones</option>
+      <option *ngFor="let num of [].constructor(11); let i = index" [value]="i">{{ i }}</option>
+    </select>
+
+    <label for="banos">Baños:</label>
+    <select id="banos" formControlName="banos" class="select-filtro">
+      <option value="" disabled selected>Seleccionar Baños</option>
+      <option *ngFor="let num of [].constructor(11); let i = index" [value]="i">{{ i }}</option>
+    </select>
+
+    <label for="superficie">Superficie (m²):</label>
+    <input type="number" id="superficie" formControlName="superficie" class="input-form" min="0" max="1000" placeholder="Superficie (m²)" required>
+
+    <label for="tipo">Tipo:</label>
+    <select id="tipo" formControlName="tipo" class="select-filtro">
+      <option value="" disabled selected>Seleccionar Tipo</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+    </select>
+
+    <label for="vendedor">Vendedor:</label>
+    <input formControlName="vendedor" class="input-form" placeholder="Vendedor" required>
+
+    <label for="fechaPublicacion">Fecha de Publicación:</label>
+    <input type="date" id="fechaPublicacion" formControlName="fechaPublicacion" class="input-form" required>
+
+    <button type="submit" class="btn-guardar">Guardar</button>
   </form>
 </div>

@@ -7,14 +7,12 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+.titulo {
   text-align: center; /* Centrar el título */
   color: #4A4A4A;
 }
 
-input[type="text"], 
-input[type="number"], 
-select {
+.buscador {
   width: 100%; /* Ancho completo */
   padding: 10px;
   margin: 10px 0; /* Espaciado vertical */
@@ -23,7 +21,7 @@ select {
   box-sizing: border-box; /* Incluir padding y border en el ancho total */
 }
 
-button {
+.btn-filtros {
   width: 100%; /* Ancho completo */
   padding: 10px;
   background-color: #4CAF50; /* Color de fondo */
@@ -35,8 +33,16 @@ button {
   transition: background-color 0.3s; /* Transición suave */
 }
 
-button:hover {
+.btn-filtros:hover {
   background-color: #45a049; /* Color al pasar el mouse */
+}
+
+.filtros {
+  margin: 20px 0; /* Espaciado vertical */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f1f1f1; /* Color de fondo para filtros */
 }
 
 .propiedades-list {
@@ -67,10 +73,77 @@ button:hover {
   }
 }
 
-.filtros {
-  margin: 20px 0; /* Espaciado vertical */
-  padding: 10px;
+.input-form {
+  width: 100%; /* Ancho completo */
+  padding: 12px; /* Aumentar el padding para más espacio */
+  margin: 10px 0; /* Espaciado vertical */
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #f1f1f1; /* Color de fondo para filtros */
+  box-sizing: border-box; /* Incluir padding y border en el ancho total */
+  color: #333; /* Color del texto */
+  font-size: 16px; /* Aumentar el tamaño de la fuente */
+}
+
+.btn-guardar {
+  width: 100%; /* Ancho completo */
+  padding: 10px;
+  background-color: #4CAF50; /* Color de fondo */
+  color: white; /* Color del texto */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px; /* Espaciado superior */
+  transition: background-color 0.3s; /* Transición suave */
+}
+
+.btn-guardar:hover {
+  background-color: #45a049; /* Color al pasar el mouse */
+}
+
+.select-filtro {
+  width: 100%; /* Ancho completo */
+  padding: 12px; /* Aumentar el padding para más espacio */
+  margin: 10px 0; /* Espaciado vertical */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Incluir padding y border en el ancho total */
+  color: #333; /* Color del texto */
+  font-size: 16px; /* Aumentar el tamaño de la fuente */
+  background-color: #fff; /* Fondo blanco para mayor contraste */
+  appearance: none; /* Eliminar el estilo por defecto del navegador */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,5" fill="%23333"/></svg>'); /* Añadir un icono de flecha */
+  background-repeat: no-repeat;
+  background-position: right 10px center; /* Posicionar el icono */
+  background-size: 10px; /* Tamaño del icono */
+}
+
+.select-filtro:focus {
+  border-color: #4CAF50; /* Cambiar el color del borde al enfocar */
+  outline: none; /* Eliminar el contorno por defecto */
+}
+
+label {
+  display: block; /* Asegura que cada etiqueta esté en su propia línea */
+  margin: 10px 0 5px; /* Espaciado entre la etiqueta y el campo */
+  font-weight: bold; /* Resaltar las etiquetas */
+  color: #333; /* Color del texto */
+}
+
+.select-filtro, .input-form {
+  width: 100%; /* Ancho completo */
+  padding: 10px;
+  margin: 10px 0; /* Espaciado vertical */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Incluir padding y border en el ancho total */
+  color: #333; /* Color del texto */
+}
+
+input::placeholder {
+  color: #999; /* Color del placeholder */
+  opacity: 1; /* Asegura que el placeholder sea completamente visible */
+}
+
+.select-filtro option {
+  color: #333; /* Color del texto de las opciones */
 }

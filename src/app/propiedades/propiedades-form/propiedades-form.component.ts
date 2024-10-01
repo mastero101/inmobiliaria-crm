@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -12,13 +12,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   templateUrl: './propiedades-form.component.html',
   styleUrl: './propiedades-form.component.scss'
 })
-export class PropiedadesFormComponent {
-  propiedades: any[] = []; // Lista de propiedades
-  propiedadesFiltradas: any[] = []; // Lista filtrada de propiedades
+export class PropiedadesFormComponent implements OnInit {
+  propiedades: any[] = []; 
+  propiedadesFiltradas: any[] = []; 
   propiedadForm: FormGroup;
-  editIndex: number | null = null; // Para saber si se está editando
-  isEditing: boolean = false; // Control para mostrar el formulario
-  showFilters: boolean = false; // Control para mostrar filtros
+  editIndex: number | null = null; 
+  isEditing: boolean = false; 
+  showFilters: boolean = false; 
+  tipos: string[] = ['RESIDENCIAL', 'APARTAMENTO', 'MULTI FAMILIAR', 'COMERCIAL'];
 
   constructor(private fb: FormBuilder) {
     this.propiedadForm = this.fb.group({
@@ -35,6 +36,10 @@ export class PropiedadesFormComponent {
 
     // Inicializar propiedades filtradas
     this.propiedadesFiltradas = this.propiedades;
+  }
+
+  ngOnInit(): void {
+    // Inicialización adicional si es necesario
   }
 
   // Método para filtrar propiedades
@@ -54,13 +59,8 @@ export class PropiedadesFormComponent {
   // Método para crear o editar una propiedad
   guardarPropiedad() {
     if (this.propiedadForm.valid) {
-      if (this.editIndex !== null) {
-        this.propiedades[this.editIndex] = this.propiedadForm.value;
-      } else {
-        this.propiedades.push(this.propiedadForm.value);
-      }
-      this.resetForm();
-      this.propiedadesFiltradas = this.propiedades; // Actualizar lista filtrada
+      const propiedadData = this.propiedadForm.value;
+      // Lógica para enviar propiedadData al backend
     } else {
       alert('Por favor, completa todos los campos requeridos.');
     }
