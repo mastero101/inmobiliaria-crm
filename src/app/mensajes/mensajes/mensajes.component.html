@@ -1,0 +1,35 @@
+<div class="chat-container">
+  <h2>Mensajes Simulados</h2>
+  <div class="chat-list">
+    <ul>
+      <li *ngFor="let mensaje of paginatedMessages" (click)="openChat(mensaje.remitente)">
+        <strong>{{ mensaje.remitente }}</strong>: {{ mensaje.contenido }}
+        <br>
+        <small>{{ mensaje.fecha | date:'short' }}</small>
+      </li>
+    </ul>
+    <div class="pagination-controls">
+      <button (click)="previousPage()" [disabled]="currentPage === 1">Anterior</button>
+      <button (click)="nextPage()" [disabled]="(currentPage * pageSize) >= mensajes.length">Siguiente</button>
+    </div>
+  </div>
+
+  <div *ngIf="currentChat" class="chat-window">
+    <h3>Chat con {{ currentChat }}</h3>
+    <div class="messages">
+      <ul>
+        <li *ngFor="let chatMensaje of chats[currentChat]" [class.self]="chatMensaje.remitente === 'Tú'">
+          <strong>{{ chatMensaje.remitente }}</strong>: {{ chatMensaje.contenido }}
+          <br>
+          <small>{{ chatMensaje.fecha | date:'short' }}</small>
+        </li>
+      </ul>
+    </div>
+
+    <form (ngSubmit)="sendMessage()" class="message-form">
+      <textarea id="message" [(ngModel)]="message" name="message" required placeholder="Escribe un mensaje..."></textarea>
+      <button type="submit">Enviar</button>
+    </form>
+    <p *ngIf="response">{{ response }}</p>
+  </div>
+</div>

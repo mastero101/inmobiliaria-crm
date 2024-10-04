@@ -1,0 +1,148 @@
+h2 {
+    text-align: center;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #564d4d;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-list {
+  max-height: 495px;
+  overflow-y: auto;
+  background-color: #564d4d;
+  padding: 8px;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 10px;
+      margin-bottom: 8px;
+      background-color: #756c6c;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #c0c0c0;
+      }
+
+      strong {
+        color: #ffffff;
+      }
+
+      small {
+        display: block;
+        color: #ede2e2;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+
+    button {
+      padding: 6px 12px;
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+
+      &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #564d4d;
+  padding: 16px;
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 16px;
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 4px;
+        background-color: #696161;
+        max-width: 70%;
+        word-wrap: break-word;
+
+        &.self {
+          background-color: #7b8da0;
+          color: #ffffff;
+          align-self: flex-end;
+        }
+
+        strong {
+          display: block;
+          font-weight: bold;
+          color: #e0dcdc;
+        }
+
+        small {
+          display: block;
+          color: #ede2e2;
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+
+  .message-form {
+    display: flex;
+    gap: 8px;
+
+    textarea {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: none;
+    }
+
+    button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+}

@@ -12,17 +12,21 @@
         <mat-icon>business_center</mat-icon>
         <span *ngIf="isExpanded">Vendedores</span>
       </a>
+      <a mat-list-item routerLink="/mensajes" routerLinkActive="active">
+        <mat-icon>message</mat-icon>
+        <span *ngIf="isExpanded">Mensajes</span>
+      </a>
       <a mat-list-item routerLink="/propiedades" routerLinkActive="active">
         <mat-icon>home</mat-icon>
         <span *ngIf="isExpanded">Propiedades</span>
       </a>
-      <a mat-list-item routerLink="/propiedades-form" routerLinkActive="active"> 
-        <mat-icon>add</mat-icon>
-        <span *ngIf="isExpanded">Modificar</span> 
-      </a>
       <a mat-list-item routerLink="/rentas" routerLinkActive="active">
         <mat-icon>attach_money</mat-icon>
         <span *ngIf="isExpanded">Rentas</span>
+      </a>
+      <a mat-list-item routerLink="/propiedades-form" routerLinkActive="active"> 
+        <mat-icon>add</mat-icon>
+        <span *ngIf="isExpanded">Modificar</span> 
       </a>
       <li *ngIf="isLoggedIn()">
         <button mat-button (click)="logout()">Logout</button>
