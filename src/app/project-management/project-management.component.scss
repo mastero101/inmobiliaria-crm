@@ -1,0 +1,35 @@
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+}

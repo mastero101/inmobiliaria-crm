@@ -7,6 +7,7 @@ import { RentasComponent } from './rentas/rentas.component';
 import { LoginComponent } from './login/login.component';
 import { MensajesComponent } from './mensajes/mensajes/mensajes.component';
 import { AuthGuard } from './auth.guard';
+import { ProjectManagementComponent } from './project-management/project-management.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'propiedades-form', component: PropiedadesFormComponent, canActivate: [AuthGuard] },
   { path: 'rentas', component: RentasComponent, canActivate: [AuthGuard] }, 
   { path: 'mensajes', component: MensajesComponent, canActivate: [AuthGuard] },
+  { path: 'project', component: ProjectManagementComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' } 
 ];

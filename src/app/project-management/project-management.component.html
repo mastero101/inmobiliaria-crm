@@ -1,0 +1,27 @@
+<button mat-raised-button color="primary" (click)="openDialog()">Agregar Proyecto</button>
+
+<ng-template #projectDialog let-dialogRef>
+  <h2 mat-dialog-title>Crear Proyecto</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Nombre del Proyecto</mat-label>
+      <input matInput [(ngModel)]="projectName" placeholder="Introduzca nombre del Proyecto" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Nombre del Cliente</mat-label>
+      <input matInput [(ngModel)]="clientName" placeholder="Introduzca Nombre del Cliente" />
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="dialogRef.close()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="addProject(); dialogRef.close()">Agregar</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ul>
+  <li *ngFor="let project of projects">
+    {{ project.name }} (Cliente: {{ project.client }})
+    <button mat-button color="warn" (click)="removeProject(project.id)">Eliminar</button>
+  </li>
+</ul>
