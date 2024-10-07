@@ -12,16 +12,105 @@
       <mat-label>Nombre del Cliente</mat-label>
       <input matInput [(ngModel)]="clientName" placeholder="Introduzca Nombre del Cliente" />
     </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Fecha de Inicio</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" placeholder="Seleccione la fecha de inicio" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="projectStatus">
+        <mat-option value="Pendiente">Pendiente</mat-option>
+        <mat-option value="En Progreso">En Progreso</mat-option>
+        <mat-option value="Completado">Completado</mat-option>
+        <mat-option value="Cancelado">Cancelado</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-button (click)="dialogRef.close()">Cancelar</button>
-    <button mat-raised-button color="primary" (click)="addProject(); dialogRef.close()">Agregar</button>
+    <button mat-raised-button color="warn" (click)="closeDialog()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="addProject(); closeDialog()">Agregar</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #projectDetailDialog let-project>
+  <div class="project-detail-dialog">
+    <h2 mat-dialog-title>Detalles del Proyecto</h2>
+    <mat-dialog-content>
+      <p><strong>Nombre del Proyecto:</strong> {{ project.name }}</p>
+      <p><strong>Cliente:</strong> {{ project.client }}</p>
+      <p><strong>Fecha de Inicio:</strong> {{ project.startDate | date }}</p>
+      <p><strong>Estado:</strong> {{ project.status }}</p>
+      
+      <div class="timeline">
+        <div class="timeline-step" [ngClass]="{'active': project.status === 'Pendiente' || project.status === 'En Progreso' || project.status === 'Completado'}">
+          Inicio
+        </div>
+        <div class="timeline-connector" [ngClass]="{'active': project.status === 'En Progreso' || project.status === 'Completado'}"></div>
+        <div class="timeline-step" [ngClass]="{'active': project.status === 'En Progreso' || project.status === 'Completado'}">
+          Proceso
+        </div>
+        <div class="timeline-connector" [ngClass]="{'active': project.status === 'Completado'}"></div>
+        <div class="timeline-step" [ngClass]="{'active': project.status === 'Completado'}">
+          Completado
+        </div>
+        <div class="timeline-connector" [ngClass]="{'active': project.status === 'Cancelado'}"></div>
+        <div class="timeline-step" [ngClass]="{'active': project.status === 'Cancelado'}">
+          Cancelado
+        </div>
+      </div>
+      
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-raised-button color="primary" (click)="openEditDialog(project)">Editar</button>
+      <button mat-raised-button color="warn" (click)="closeDialog()">Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+<ng-template #editProjectDialog let-dialogRef>
+  <h2 mat-dialog-title>Editar Proyecto</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Nombre del Proyecto</mat-label>
+      <input matInput [(ngModel)]="editingProject.name" placeholder="Introduzca nombre del Proyecto" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Nombre del Cliente</mat-label>
+      <input matInput [(ngModel)]="editingProject.client" placeholder="Introduzca Nombre del Cliente" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Fecha de Inicio</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="editingProject.startDate" placeholder="Seleccione la fecha de inicio" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="editingProject.status">
+        <mat-option value="Pendiente">Pendiente</mat-option>
+        <mat-option value="En Progreso">En Progreso</mat-option>
+        <mat-option value="Completado">Completado</mat-option>
+        <mat-option value="Cancelado">Cancelado</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="deleteProject(editingProject.id)">Eliminar</button>
+    <button mat-raised-button color="primary" (click)="saveProject()">Guardar</button>
+    <button mat-raised-button (click)="closeEditDialog()">Cancelar</button>
   </mat-dialog-actions>
 </ng-template>
 
 <ul>
-  <li *ngFor="let project of projects">
+  <li *ngFor="let project of projects" (click)="openProjectDetailDialog(project)">
     {{ project.name }} (Cliente: {{ project.client }})
-    <button mat-button color="warn" (click)="removeProject(project.id)">Eliminar</button>
   </li>
 </ul>

@@ -1,35 +1,288 @@
-h2 {
+// Variables
+$background-color: #2c2c2c;
+$dialog-background: #3a3a3a;
+$primary-color: #d887f3;
+$primary-hover: #c76de0;
+$warn-color: #f44336;
+$warn-hover: #d32f2f;
+$text-color: #ffffff;
+$secondary-text: #b0b0b0;
+$input-background: #4a4a4a;
+$list-item-background: #434040;
+$list-item-hover: #4f4b4b;
+$timeline-connector: #5a5a5a;
+$scrollbar-thumb: #5a5a5a;
+$scrollbar-thumb-hover: #6a6a6a;
+$green: #4caf50;
+
+// Global Styles
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: $background-color;
+  color: $text-color;
+}
+
+// Container Styles
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// Dialog Styles
+.mat-dialog-container {
+  background-color: $dialog-background;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+h2.mat-dialog-title {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  color: $primary-color;
+  font-weight: 500;
+  font-size: 24px;
 }
 
 mat-form-field {
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-button {
-  width: 100%;
-  margin-top: 10px;
+.mat-form-field-appearance-fill {
+  .mat-form-field-flex {
+    background-color: $input-background;
+  }
 }
 
+.mat-form-field-label {
+  color: $secondary-text;
+}
+
+.mat-input-element {
+  color: $text-color;
+}
+
+// Button Styles
+button.mat-raised-button {
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+
+  &.mat-primary {
+    background-color: $primary-color;
+    color: $background-color;
+
+    &:hover {
+      background-color: $primary-hover;
+      box-shadow: 0 2px 8px rgba($primary-color, 0.4);
+    }
+  }
+
+  &.mat-warn {
+    background-color: $warn-color;
+
+    &:hover {
+      background-color: $warn-hover;
+      box-shadow: 0 2px 8px rgba($warn-color, 0.4);
+    }
+  }
+}
+
+button.mat-raised-button.mat-primary {
+  background-color: #2196F3;
+  color: white;
+
+  &:hover {
+    background-color: #1976D2;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.4);
+  }
+}
+
+// Project List Styles
 ul {
   list-style-type: none;
   padding: 0;
-  margin-top: 20px;
+  margin-top: 24px;
+}
 
-  li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid #ccc;
-    margin-bottom: 8px;
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 16px;
+  background-color: $list-item-background;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+    background-color: $list-item-hover;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 0.875rem;
     border-radius: 4px;
-    background-color: #f9f9f9;
+    color: $text-color;
+    background-color: $warn-color;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
     &:hover {
-      background-color: #f1f1f1;
+      background-color: $warn-hover;
+      box-shadow: 0 2px 8px rgba($warn-color, 0.4);
     }
+  }
+}
+
+// Timeline Styles
+.timeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 28px 0;
+  padding: 20px;
+  background-color: $dialog-background;
+  border-radius: 8px;
+}
+
+.timeline-step {
+  position: relative;
+  padding: 12px;
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
+  color: $secondary-text;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &.active {
+    color: $primary-color;
+  }
+
+  .step-label {
+    margin-bottom: 8px;
+  }
+
+  .step-indicator {
+    width: 16px;
+    height: 16px;
+    background-color: $timeline-connector;
+    border-radius: 50%;
+    position: relative;
+    z-index: 1;
+  }
+
+  &.active .step-indicator {
+    background-color: $primary-color;
+  }
+
+  .step-indicator.current {
+    background-color: $green;
+    box-shadow: 0 0 8px rgba($green, 0.6);
+  }
+}
+
+.timeline-connector {
+  flex: 1;
+  height: 3px;
+  background: $timeline-connector;
+
+  &.active {
+    background: $primary-color;
+  }
+}
+
+// Add Project Button
+.add-project-btn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 30px auto;
+  padding: 12px 24px;
+  font-size: 1rem;
+  text-align: center;
+  background-color: $primary-color;
+  color: $background-color;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $primary-hover;
+    box-shadow: 0 4px 12px rgba($primary-color, 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+// Scrollbar Styles
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: $dialog-background;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $scrollbar-thumb;
+  border-radius: 5px;
+
+  &:hover {
+    background: $scrollbar-thumb-hover;
+  }
+}
+
+@media (max-width: 600px) {
+  .mat-dialog-container {
+    padding: 16px;
+    max-width: 95vw; /* Ajusta el ancho del modal en pantallas pequeñas */
+    border-radius: 4px;
+  }
+
+  h2.mat-dialog-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  mat-dialog-content p {
+    font-size: 14px; /* Reducir el tamaño del texto */
+    margin-bottom: 10px;
+  }
+
+  .timeline {
+    flex-direction: column; /* Cambia la disposición a vertical para que se vea mejor en pantallas pequeñas */
+    padding: 12px;
+  }
+
+  .timeline-step {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .timeline-connector {
+    margin: 8px 0; /* Ajusta los conectores para que no se vean muy grandes en pantallas pequeñas */
+    height: 2px;
+  }
+
+  button.mat-raised-button {
+    font-size: 12px;
+    padding: 8px 16px;
+    margin-bottom: 8px;
+  }
+
+  .add-project-btn {
+    max-width: 100%;
+    font-size: 0.875rem;
   }
 }
