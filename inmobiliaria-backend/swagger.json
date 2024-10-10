@@ -1,0 +1,374 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API para la inmobiliaria",
+        "version": "1.0.0",
+        "title": "Inmobiliaria API"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "paths": {
+        "/usuarios": {
+            "get": {
+                "summary": "Obtener todos los usuarios",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Crear un nuevo usuario",
+                "parameters": [
+                    {
+                        "name": "usuario",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nombre": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Usuario creado"
+                    }
+                }
+            }
+        },
+        "/usuarios/{id}": {
+            "delete": {
+                "summary": "Eliminar un usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID del usuario a eliminar",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Usuario eliminado"
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Editar un usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID del usuario a editar",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "usuario",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nombre": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario actualizado"
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
+                    }
+                }
+            }
+        },
+        "/propiedades": {
+            "get": {
+                "summary": "Obtener todas las propiedades",
+                "responses": {
+                    "200": {
+                        "description": "Lista de propiedades"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Crear una nueva propiedad",
+                "parameters": [
+                    {
+                        "name": "propiedad",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "direccion": {
+                                    "type": "string"
+                                },
+                                "precio": {
+                                    "type": "number"
+                                },
+                                "habitaciones": {
+                                    "type": "integer"
+                                },
+                                "banos": {
+                                    "type": "integer"
+                                },
+                                "superficie": {
+                                    "type": "number"
+                                },
+                                "tipo": {
+                                    "type": "string"
+                                },
+                                "vendedor": {
+                                    "type": "string"
+                                },
+                                "fechaPublicacion": {
+                                    "type": "string",
+                                    "format": "date"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Propiedad creada"
+                    }
+                }
+            }
+        },
+        "/propiedades/{id}": {
+            "delete": {
+                "summary": "Eliminar una propiedad",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID de la propiedad a eliminar",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Propiedad eliminada"
+                    },
+                    "404": {
+                        "description": "Propiedad no encontrada"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Editar una propiedad",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID de la propiedad a editar",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "propiedad",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "direccion": {
+                                    "type": "string"
+                                },
+                                "precio": {
+                                    "type": "number"
+                                },
+                                "habitaciones": {
+                                    "type": "integer"
+                                },
+                                "banos": {
+                                    "type": "integer"
+                                },
+                                "superficie": {
+                                    "type": "number"
+                                },
+                                "tipo": {
+                                    "type": "string"
+                                },
+                                "vendedor": {
+                                    "type": "string"
+                                },
+                                "fechaPublicacion": {
+                                    "type": "string",
+                                    "format": "date"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Propiedad actualizada"
+                    },
+                    "404": {
+                        "description": "Propiedad no encontrada"
+                    }
+                }
+            }
+        },
+        "/eventos": {
+            "get": {
+                "summary": "Obtener todos los eventos",
+                "responses": {
+                    "200": {
+                        "description": "Lista de eventos"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Crear un nuevo evento",
+                "parameters": [
+                    {
+                        "name": "evento",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "titulo": {
+                                    "type": "string"
+                                },
+                                "descripcion": {
+                                    "type": "string"
+                                },
+                                "fechaInicio": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "fechaFin": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "ubicacion": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Evento creado"
+                    }
+                }
+            }
+        },
+        "/eventos/{id}": {
+            "get": {
+                "summary": "Obtener un evento por ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID del evento a obtener",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del evento"
+                    },
+                    "404": {
+                        "description": "Evento no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Editar un evento",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID del evento a editar",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "evento",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "titulo": {
+                                    "type": "string"
+                                },
+                                "descripcion": {
+                                    "type": "string"
+                                },
+                                "fechaInicio": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "fechaFin": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "ubicacion": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Evento actualizado"
+                    },
+                    "404": {
+                        "description": "Evento no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Eliminar un evento",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID del evento a eliminar",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Evento eliminado"
+                    },
+                    "404": {
+                        "description": "Evento no encontrado"
+                    }
+                }
+            }
+        }
+    }
+}

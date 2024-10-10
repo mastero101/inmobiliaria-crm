@@ -47,16 +47,14 @@
         
         <ul>
           <li *ngFor="let task of selectedTasks; let i = index">
-            {{ task.description }} - {{ task.time }}
-            <div class="task-buttons">
-              <button (click)="editTask(i)">Editar</button>
-              <button (click)="deleteTask(i)">Eliminar</button>
-            </div>
+            {{ task.titulo }}
+            <button (click)="editTask(task, i)">Editar</button>
+            <button (click)="deleteTask(task, i)">Eliminar</button>
           </li>
         </ul>
 
-        <input [(ngModel)]="newTask.description" placeholder="Nueva tarea" />
-        <input type="time" [(ngModel)]="newTask.time" /> <!-- Campo para la hora -->
+        <input [(ngModel)]="newTask.descripcion" placeholder="Nueva tarea" />
+        <input type="text" [(ngModel)]="newTask.titulo" placeholder="Título" />
         
         <div class="button-container">
           <button (click)="addTask()">Agregar Tarea</button>

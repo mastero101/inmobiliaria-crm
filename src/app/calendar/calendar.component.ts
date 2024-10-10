@@ -1,11 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { EventosService } from '../services/eventos.service'; // Importa el servicio
 
 interface Task {
-  description: string;
-  time: string;
-  date: number;
+  id?: number; // Asegúrate de incluir el ID para las operaciones de actualización y eliminación
+  titulo: string;
+  descripcion: string;
+  fechaInicio: string | Date;
+  fechaFin: string | Date;
+  ubicacion: string;
 }
 
 @Component({
@@ -18,7 +22,7 @@ interface Task {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
   currentWeekStart: Date;
   currentMonth: number;
   currentYear: number;
@@ -27,44 +31,113 @@ export class CalendarComponent {
   selectedDay: { date: number; dayName: string } | null = null;
   isModalOpen: boolean = false;
   selectedTasks: Task[] = []; // Cambia el tipo para incluir 'date'
-  newTask: Task = { description: '', time: '', date: 0 }; // Incluye 'date' en la inicialización
+  newTask: Task = { titulo: '', descripcion: '', fechaInicio: '', fechaFin: '', ubicacion: '' }; // Incluye 'date' en la inicialización
 
-  constructor() {
+  constructor(private eventosService: EventosService) { // Inyecta el servicio
     const today = new Date();
     this.currentMonth = today.getMonth();
     this.currentYear = today.getFullYear();
     this.currentWeekStart = this.getStartOfWeek(today);
     this.daysInMonth = this.getDaysInMonth(this.currentMonth, this.currentYear);
-    this.loadTasks(); // Cargar tareas desde localStorage
+    this.loadTasks(); // Cargar tareas desde el backend
+  }
+
+  ngOnInit() {
+    const today = new Date();
+    this.selectedDay = {
+      date: today.getTime(),
+      dayName: this.getDayName(today)
+    };
+    console.log('selectedDay inicializado:', this.selectedDay);
+    // ... otro código de inicialización
+  }
+
+  selectDay(day: number) {
+    const selectedDate = new Date(this.currentYear, this.currentMonth, day);
+    const selectedDay = {
+      date: selectedDate.getTime(), // Esto es un timestamp válido
+      dayName: this.getDayName(selectedDate)
+    };
+    this.openModal(selectedDay);
   }
 
   loadTasks() {
-    if (typeof window !== 'undefined') { // Verificar si estamos en el navegador
-      const tasks = localStorage.getItem('tasks');
-      if (tasks) {
-        const allTasks: Task[] = JSON.parse(tasks); // Asegurarse de que sea un arreglo de Task
-        this.selectedTasks = allTasks.filter(task => task.date === this.selectedDay?.date); // Filtrar tareas por fecha
-        console.log('Tareas cargadas desde localStorage:', this.selectedTasks); // Verificar que se carguen
-      }
+    if (!this.selectedDay) {
+      console.error('No hay un día seleccionado');
+      return;
     }
+
+    const selectedDate = new Date(this.selectedDay.date);
+  
+    this.eventosService.getEventos().then((tasks: Task[]) => {
+      this.selectedTasks = tasks.filter((task: Task) => {
+        if (task.fechaInicio) {
+          const taskDate = new Date(task.fechaInicio);
+          return taskDate.toDateString() === selectedDate.toDateString();
+        }
+        return false;
+      });
+      console.log('Tareas cargadas desde el backend:', this.selectedTasks);
+    }).catch(error => {
+      console.error('Error al cargar tareas:', error);
+    });
   }
 
   saveTasks() {
-    const tasks: Task[] = JSON.parse(localStorage.getItem('tasks') || '[]');
-    
-    // Filtrar las tareas que corresponden al día seleccionado
-    const updatedTasks = tasks.filter(task => task.date !== this.selectedDay?.date);
-    
-    // Agregar las tareas actuales
-    updatedTasks.push(...this.selectedTasks);
-    
-    // Guardar las tareas actualizadas en localStorage
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+    // Este método ya no es necesario si estamos usando el backend para todas las operaciones
   }
 
-  getDayName(date: Date): string {
+  addTask() {
+    if (this.newTask.descripcion && this.selectedDay) {
+      const eventDate = new Date(this.selectedDay.date);
+
+      const evento = {
+        titulo: this.newTask.titulo,
+        descripcion: this.newTask.descripcion,
+        fechaInicio: eventDate.toISOString(),
+        fechaFin: eventDate.toISOString(),
+        ubicacion: this.newTask.ubicacion
+      };
+
+      this.eventosService.createEvento(evento).then(task => {
+        this.selectedTasks.push(task);
+        this.newTask = { titulo: '', descripcion: '', fechaInicio: '', fechaFin: '', ubicacion: '' };
+        this.loadTasks();
+      }).catch(error => {
+        console.error('Error al agregar tarea:', error);
+      });
+    } else {
+      console.error('No se puede agregar la tarea: descripción o día seleccionado no válidos.');
+    }
+  }
+
+  editTask(task: Task, index: number) {
+    console.log('Editando tarea:', task);
+    // Implementa aquí la lógica para editar la tarea
+    // Por ejemplo, podrías abrir un modal de edición o navegar a una página de edición
+  }
+
+  deleteTask(task: Task, index: number) {
+    if (task.id !== undefined) {
+      this.eventosService.deleteEvento(task.id).then(() => {
+        this.selectedTasks.splice(index, 1);
+      }).catch(error => {
+        console.error('Error al eliminar tarea:', error);
+      });
+    } else {
+      console.error('No se puede eliminar la tarea: ID no válido.');
+    }
+  }
+
+  getDayName(day: Date | number): string {
     const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    return dayNames[date.getDay()];
+    if (day instanceof Date) {
+      return dayNames[day.getDay()];
+    } else if (typeof day === 'number' && day >= 0 && day < 7) {
+      return dayNames[day];
+    } else {
+      throw new Error('Invalid input for getDayName');
+    }
   }
 
   getStartOfWeek(date: Date): Date {
@@ -182,10 +255,17 @@ export class CalendarComponent {
     this.currentView = view;
   }
 
-  openModal(day: { date: number, dayName: string }) {
-    this.selectedDay = day; // Guardar el día seleccionado
-    this.loadTasks(); // Cargar tareas para el día
-    this.isModalOpen = true; // Abrir el modal
+  openModal(day: { date: number; dayName: string }) {
+    // Asegúrate de que day.date sea un timestamp válido
+    const currentDate = new Date();
+    const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day.date);
+    this.selectedDay = {
+      date: selectedDate.getTime(),
+      dayName: this.getDayName(selectedDate)
+    };
+    console.log('Día seleccionado en openModal:', this.selectedDay);
+    this.loadTasks();
+    this.isModalOpen = true;
   }
 
   closeModal() {
@@ -202,29 +282,11 @@ export class CalendarComponent {
     ];
   }
 
-  addTask() {
-    if (this.newTask.description) {
-      const taskWithDate: Task = {
-        ...this.newTask,
-        date: this.selectedDay?.date ?? 0 // Asocia la tarea con el día seleccionado, usando 0 si es undefined
-      };
-      this.selectedTasks.push(taskWithDate); // Agregar la nueva tarea
-      this.saveTasks(); // Guardar tareas en localStorage
-      this.newTask = { description: '', time: '', date: 0 }; // Limpiar el campo de entrada
+  formatSelectedDate(): string {
+    if (this.selectedDay) {
+      const date = new Date(this.selectedDay.date);
+      return `${this.selectedDay.dayName} ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     }
-  }
-
-  editTask(index: number) {
-    const taskToEdit = this.selectedTasks[index];
-    this.newTask = { ...taskToEdit }; // Cargar la tarea en el campo de entrada
-    this.selectedTasks.splice(index, 1); // Eliminar la tarea de la lista
-    this.saveTasks(); // Guardar cambios en localStorage
-  }
-
-  deleteTask(index: number) {
-    if (index > -1) {
-      this.selectedTasks.splice(index, 1); // Eliminar la tarea del array
-      this.saveTasks(); // Guardar cambios en localStorage
-    }
+    return '';
   }
 }
