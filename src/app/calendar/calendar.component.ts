@@ -51,8 +51,15 @@ export class CalendarComponent {
 
   saveTasks() {
     const tasks: Task[] = JSON.parse(localStorage.getItem('tasks') || '[]');
-    tasks.push(...this.selectedTasks); // Asegúrate de que 'selectedTasks' contenga objetos de tipo 'Task'
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    
+    // Filtrar las tareas que corresponden al día seleccionado
+    const updatedTasks = tasks.filter(task => task.date !== this.selectedDay?.date);
+    
+    // Agregar las tareas actuales
+    updatedTasks.push(...this.selectedTasks);
+    
+    // Guardar las tareas actualizadas en localStorage
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
   }
 
   getDayName(date: Date): string {
@@ -212,5 +219,12 @@ export class CalendarComponent {
     this.newTask = { ...taskToEdit }; // Cargar la tarea en el campo de entrada
     this.selectedTasks.splice(index, 1); // Eliminar la tarea de la lista
     this.saveTasks(); // Guardar cambios en localStorage
+  }
+
+  deleteTask(index: number) {
+    if (index > -1) {
+      this.selectedTasks.splice(index, 1); // Eliminar la tarea del array
+      this.saveTasks(); // Guardar cambios en localStorage
+    }
   }
 }

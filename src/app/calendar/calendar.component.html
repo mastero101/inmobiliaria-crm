@@ -47,8 +47,11 @@
         
         <ul>
           <li *ngFor="let task of selectedTasks; let i = index">
-            {{ task.description }} - {{ task.time }} <!-- Mostrar descripción y hora -->
-            <button (click)="editTask(i)">Editar</button>
+            {{ task.description }} - {{ task.time }}
+            <div class="task-buttons">
+              <button (click)="editTask(i)">Editar</button>
+              <button (click)="deleteTask(i)">Eliminar</button>
+            </div>
           </li>
         </ul>
 

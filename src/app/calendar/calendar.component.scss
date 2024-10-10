@@ -164,3 +164,27 @@
     justify-content: space-between; /* Espaciado entre botones */
     flex-wrap: wrap; /* Permitir que los botones se envuelvan en móviles */
   }
+
+  /* Ajustes específicos para móviles */
+  @media (max-width: 768px) {
+    .button-container {
+      flex-direction: column; /* Cambiar a columna para móviles */
+      align-items: stretch; /* Alinear los botones al ancho completo */
+    }
+
+    .button-container button {
+      width: 100%; /* Hacer que los botones ocupen todo el ancho */
+      margin: 5px 0; /* Espaciado entre botones */
+    }
+  }
+
+  .task-buttons {
+    display: flex; /* Usar flexbox para alinear los botones */
+    justify-content: space-between; /* Espaciado entre botones */
+    margin-top: 5px; /* Espaciado superior */
+  }
+
+  .task-buttons button {
+    flex: 1; /* Hacer que los botones ocupen el mismo espacio */
+    margin: 0 5px; /* Espaciado entre botones */
+  }
