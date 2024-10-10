@@ -1,0 +1,64 @@
+<div class="calendar">
+    <div class="header">
+      <button (click)="changeView(-1)">Anterior</button>
+      <h2>
+        <ng-container *ngIf="currentView === 'week'">
+          Semana {{ getCurrentWeekNumber() }} {{ currentMonth + 1 }}/{{ currentYear }}
+        </ng-container>
+        <ng-container *ngIf="currentView === 'day'">
+          {{ getCurrentDayWithName().dayName }} {{ getCurrentDayWithName().date }}/{{ currentMonth + 1 }}/{{ currentYear }}
+        </ng-container>
+        <ng-container *ngIf="currentView === 'month'">
+          {{ currentMonth + 1 }}/{{ currentYear }}
+        </ng-container>
+      </h2>
+      <button (click)="changeView(1)">Siguiente</button>
+    </div>
+    <div class="view-selector">
+      <button (click)="setView('month')">Mes</button>
+      <button (click)="setView('week')">Semana</button>
+      <button (click)="setView('day')">Día</button>
+    </div>
+    <div class="days" *ngIf="currentView === 'month'">
+      <div *ngFor="let day of getDaysInMonthWithNames(currentMonth, currentYear)" class="day" (click)="openModal(day)">
+        {{ day.date }}
+        <div class="day-name">{{ day.dayName }}</div>
+      </div>
+    </div>
+    <div class="days" *ngIf="currentView === 'week'">
+      <div *ngFor="let day of getDaysInCurrentWeek()" class="day" (click)="openModal(day)">
+        {{ day.date }}
+        <div class="day-name">{{ day.dayName }}</div>
+      </div>
+    </div>
+    <div class="days" *ngIf="currentView === 'day'">
+      <div class="day" (click)="openModal(getCurrentDayWithName())">
+        {{ getCurrentDayWithName().date }}
+        <div class="day-name">{{ getCurrentDayWithName().dayName }}</div>
+      </div>
+    </div>
+
+    <!-- Modal para mostrar tareas -->
+    <div class="modal" *ngIf="isModalOpen">
+      <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>Tareas del Día</h2>
+        <h3 *ngIf="selectedDay">{{ selectedDay.dayName }} {{ selectedDay.date }}/{{ currentMonth + 1 }}/{{ currentYear }}</h3>
+        
+        <ul>
+          <li *ngFor="let task of selectedTasks; let i = index">
+            {{ task.description }} - {{ task.time }} <!-- Mostrar descripción y hora -->
+            <button (click)="editTask(i)">Editar</button>
+          </li>
+        </ul>
+
+        <input [(ngModel)]="newTask.description" placeholder="Nueva tarea" />
+        <input type="time" [(ngModel)]="newTask.time" /> <!-- Campo para la hora -->
+        
+        <div class="button-container">
+          <button (click)="addTask()">Agregar Tarea</button>
+          <button (click)="closeModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>

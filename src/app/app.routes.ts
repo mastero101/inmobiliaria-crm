@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { MensajesComponent } from './mensajes/mensajes/mensajes.component';
 import { AuthGuard } from './auth.guard';
 import { ProjectManagementComponent } from './project-management/project-management.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'rentas', component: RentasComponent, canActivate: [AuthGuard] }, 
   { path: 'mensajes', component: MensajesComponent, canActivate: [AuthGuard] },
   { path: 'project', component: ProjectManagementComponent},
+  { path: 'calendar', component: CalendarComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' } 
 ];
