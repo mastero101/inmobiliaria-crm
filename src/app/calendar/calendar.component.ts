@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { EventosService } from '../services/eventos.service'; // Importa el servicio
+import { EventosService } from '../services/eventos.service';
 
 interface Task {
-  id?: number; // Asegúrate de incluir el ID para las operaciones de actualización y eliminación
+  id?: number;
   titulo: string;
   descripcion: string;
   fechaInicio: string | Date;
@@ -27,13 +27,14 @@ export class CalendarComponent implements OnInit {
   currentMonth: number;
   currentYear: number;
   currentView: 'month' | 'week' | 'day' = 'month';
-  daysInMonth: number[];
+  daysInMonth: { date: number; dayName: string }[];
   selectedDay: { date: number; dayName: string } | null = null;
   isModalOpen: boolean = false;
-  selectedTasks: Task[] = []; // Cambia el tipo para incluir 'date'
-  newTask: Task = { titulo: '', descripcion: '', fechaInicio: '', fechaFin: '', ubicacion: '' }; // Incluye 'date' en la inicialización
+  selectedTasks: Task[] = []; 
+  newTask: Task = { titulo: '', descripcion: '', fechaInicio: '', fechaFin: '', ubicacion: '' }; 
+  selectedTaskIndex: number | null = null;
 
-  constructor(private eventosService: EventosService) { // Inyecta el servicio
+  constructor(private eventosService: EventosService) {
     const today = new Date();
     this.currentMonth = today.getMonth();
     this.currentYear = today.getFullYear();
@@ -44,77 +45,107 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit() {
     const today = new Date();
+    this.currentYear = today.getFullYear();
+    this.currentMonth = today.getMonth();
+    
     this.selectedDay = {
       date: today.getTime(),
       dayName: this.getDayName(today)
     };
     console.log('selectedDay inicializado:', this.selectedDay);
-    // ... otro código de inicialización
   }
 
   selectDay(day: number) {
     const selectedDate = new Date(this.currentYear, this.currentMonth, day);
     const selectedDay = {
-      date: selectedDate.getTime(), // Esto es un timestamp válido
+      date: selectedDate.getTime(),
       dayName: this.getDayName(selectedDate)
     };
     this.openModal(selectedDay);
   }
 
   loadTasks() {
-    if (!this.selectedDay) {
-      console.error('No hay un día seleccionado');
-      return;
-    }
-
-    const selectedDate = new Date(this.selectedDay.date);
-  
-    this.eventosService.getEventos().then((tasks: Task[]) => {
-      this.selectedTasks = tasks.filter((task: Task) => {
-        if (task.fechaInicio) {
-          const taskDate = new Date(task.fechaInicio);
-          return taskDate.toDateString() === selectedDate.toDateString();
+    this.eventosService.getEventos().then(tasks => {
+      this.selectedTasks = tasks.map((task: Task) => {
+        const fechaInicio = new Date(task.fechaInicio);
+        const fechaFin = new Date(task.fechaFin);
+        
+        if (this.selectedDay) {
+          const selectedDate = new Date(this.selectedDay.date);
+          fechaInicio.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+          fechaFin.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
         }
-        return false;
+        
+        return {
+          ...task,
+          fechaInicio,
+          fechaFin
+        };
       });
-      console.log('Tareas cargadas desde el backend:', this.selectedTasks);
-    }).catch(error => {
-      console.error('Error al cargar tareas:', error);
-    });
+      console.log('Tareas cargadas:', this.selectedTasks);
+    }).catch(error => console.error('Error al cargar tareas:', error));
   }
 
   saveTasks() {
-    // Este método ya no es necesario si estamos usando el backend para todas las operaciones
   }
 
   addTask() {
-    if (this.newTask.descripcion && this.selectedDay) {
-      const eventDate = new Date(this.selectedDay.date);
-
-      const evento = {
-        titulo: this.newTask.titulo,
-        descripcion: this.newTask.descripcion,
-        fechaInicio: eventDate.toISOString(),
-        fechaFin: eventDate.toISOString(),
-        ubicacion: this.newTask.ubicacion
+    if (this.newTask.titulo && this.selectedDay) {
+      const selectedDate = new Date(this.selectedDay.date);
+      
+      const fechaInicio = new Date(selectedDate);
+      const fechaFin = new Date(selectedDate);
+      
+      if (typeof this.newTask.fechaInicio === 'string') {
+        const [horasInicio, minutosInicio] = this.newTask.fechaInicio.split(':');
+        fechaInicio.setHours(parseInt(horasInicio), parseInt(minutosInicio));
+      }
+      
+      if (typeof this.newTask.fechaFin === 'string') {
+        const [horasFin, minutosFin] = this.newTask.fechaFin.split(':');
+        fechaFin.setHours(parseInt(horasFin), parseInt(minutosFin));
+      }
+      
+      console.log('Fecha de inicio:', fechaInicio);
+      console.log('Fecha de fin:', fechaFin);
+      
+      const evento: Task = {
+        ...this.newTask,
+        fechaInicio: fechaInicio.toISOString(),
+        fechaFin: fechaFin.toISOString()
       };
-
-      this.eventosService.createEvento(evento).then(task => {
-        this.selectedTasks.push(task);
-        this.newTask = { titulo: '', descripcion: '', fechaInicio: '', fechaFin: '', ubicacion: '' };
-        this.loadTasks();
-      }).catch(error => {
-        console.error('Error al agregar tarea:', error);
-      });
-    } else {
-      console.error('No se puede agregar la tarea: descripción o día seleccionado no válidos.');
+      
+      if (this.selectedTaskIndex !== null && this.selectedTasks[this.selectedTaskIndex].id !== undefined) {
+        // Actualizar tarea existente
+        this.eventosService.updateEvento(this.selectedTasks[this.selectedTaskIndex].id!, evento).then(updatedTask => {
+          this.selectedTasks[this.selectedTaskIndex!] = updatedTask;
+          this.selectedTaskIndex = null;
+          this.loadTasks();
+        }).catch(error => console.error('Error al actualizar tarea:', error));
+      } else {
+        // Crear nueva tarea
+        this.eventosService.createEvento(evento).then(task => {
+          this.selectedTasks.push(task);
+          this.loadTasks();
+        }).catch(error => console.error('Error al agregar tarea:', error));
+      }
+      
+      this.newTask = { titulo: '', descripcion: '', fechaInicio: '', fechaFin: '', ubicacion: '' };
+      this.closeModal();
     }
   }
 
   editTask(task: Task, index: number) {
-    console.log('Editando tarea:', task);
-    // Implementa aquí la lógica para editar la tarea
-    // Por ejemplo, podrías abrir un modal de edición o navegar a una página de edición
+    // Cargar los datos de la tarea seleccionada en el formulario
+    this.newTask = { 
+      ...task
+    };
+
+    // Guardar el índice de la tarea seleccionada para actualizarla después
+    this.selectedTaskIndex = index;
+
+    // Abrir el modal para editar
+    this.isModalOpen = true;
   }
 
   deleteTask(task: Task, index: number) {
@@ -146,11 +177,14 @@ export class CalendarComponent implements OnInit {
     return new Date(date.setDate(diff));
   }
 
-  getDaysInMonth(month: number, year: number): number[] {
+  getDaysInMonth(month: number, year: number): { date: number; dayName: string }[] {
     const date = new Date(year, month, 1);
     const days = [];
     while (date.getMonth() === month) {
-      days.push(date.getDate());
+      days.push({
+        date: date.getDate(),
+        dayName: this.getDayName(date)
+      });
       date.setDate(date.getDate() + 1);
     }
     return days;
@@ -226,6 +260,17 @@ export class CalendarComponent implements OnInit {
       this.currentYear--;
     }
     this.daysInMonth = this.getDaysInMonth(this.currentMonth, this.currentYear);
+    this.updateSelectedDay();
+  }
+
+  updateSelectedDay() {
+    if (this.selectedDay) {
+      const updatedDate = new Date(this.currentYear, this.currentMonth, 1);
+      this.selectedDay = {
+        date: updatedDate.getTime(),
+        dayName: this.getDayName(updatedDate)
+      };
+    }
   }
 
   changeView(offset: number) {
@@ -255,15 +300,26 @@ export class CalendarComponent implements OnInit {
     this.currentView = view;
   }
 
-  openModal(day: { date: number; dayName: string }) {
-    // Asegúrate de que day.date sea un timestamp válido
-    const currentDate = new Date();
-    const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day.date);
+  openModal(day: number | { date: number; dayName: string }) {
+    let selectedDate: Date;
+    
+    if (typeof day === 'number') {
+      // Si day es un número, asumimos que es el día del mes actual
+      selectedDate = new Date(this.currentYear, this.currentMonth, day);
+    } else {
+      // Si day es un objeto, creamos una nueva fecha con el año, mes y día actuales
+      const currentDate = new Date();
+      selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day.date);
+    }
+
     this.selectedDay = {
       date: selectedDate.getTime(),
       dayName: this.getDayName(selectedDate)
     };
+
     console.log('Día seleccionado en openModal:', this.selectedDay);
+    console.log('Fecha correspondiente:', new Date(this.selectedDay.date));
+    
     this.loadTasks();
     this.isModalOpen = true;
   }
@@ -273,20 +329,19 @@ export class CalendarComponent implements OnInit {
     this.selectedDay = null; // Reiniciar el día seleccionado
   }
 
-  getTasksForDay(date: number): { description: string; time: string }[] {
-    // Aquí deberías implementar la lógica para obtener las tareas del día
-    // Ejemplo de tareas
-    return [
-      { description: 'Tarea 1', time: '10:00' },
-      { description: 'Tarea 2', time: '14:00' }
-    ];
-  }
-
   formatSelectedDate(): string {
     if (this.selectedDay) {
       const date = new Date(this.selectedDay.date);
-      return `${this.selectedDay.dayName} ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+      return `${this.selectedDay.dayName} ${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
     }
     return '';
+  }
+
+  formatTime(date: string | Date): string {
+    if (typeof date === 'string') {
+      // Si es una cadena ISO, conviértala a Date
+      date = new Date(date);
+    }
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 }
