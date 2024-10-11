@@ -57,35 +57,34 @@ export class CalendarComponent implements OnInit {
 
   selectDay(day: number) {
     const selectedDate = new Date(this.currentYear, this.currentMonth, day);
-    const selectedDay = {
-      date: selectedDate.getTime(),
-      dayName: this.getDayName(selectedDate)
+    this.selectedDay = {
+        date: selectedDate.getTime(),
+        dayName: this.getDayName(selectedDate)
     };
-    this.openModal(selectedDay);
-  }
-
-loadTasks() {
-  if (this.selectedDay) {
-    const selectedDate = new Date(this.selectedDay.date);
-    const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-    const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 23, 59, 59, 999);
-
-    this.eventosService.getEventos().then(tasks => {
-      this.selectedTasks = tasks.filter((task: Task) => {
-        const taskStart = new Date(task.fechaInicio);
-        return taskStart >= startOfDay && taskStart <= endOfDay;
-      }).map((task: Task) => ({
-        ...task,
-        fechaInicio: new Date(task.fechaInicio),
-        fechaFin: new Date(task.fechaFin)
-      }));
-      console.log('Tareas cargadas para', this.formatSelectedDate(), ':', this.selectedTasks);
-    }).catch(error => console.error('Error al cargar tareas:', error));
-  } else {
-    console.warn('No hay día seleccionado, no se pueden cargar las tareas.');
-    this.selectedTasks = [];
-  }
+    
+    this.loadTasks();  // Cargar las tareas específicas para el día seleccionado
 }
+
+  loadTasks() {
+    if (this.selectedDay) {
+        const selectedDate = new Date(this.selectedDay.date);
+        const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+        const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 23, 59, 59, 999);
+
+        this.eventosService.getEventos().then(tasks => {
+            this.selectedTasks = tasks.filter((task: Task) => {
+                const taskStart = new Date(task.fechaInicio);
+                return taskStart >= startOfDay && taskStart <= endOfDay;
+            }).map((task: Task) => ({
+                ...task,
+                fechaInicio: new Date(task.fechaInicio),
+                fechaFin: new Date(task.fechaFin)
+            }));
+        }).catch(error => console.error('Error al cargar tareas:', error));
+    } else {
+        this.selectedTasks = [];
+    }
+  }
 
   saveTasks() {
   }
@@ -254,14 +253,15 @@ loadTasks() {
   changeMonth(offset: number) {
     this.currentMonth += offset;
     if (this.currentMonth > 11) {
-      this.currentMonth = 0;
-      this.currentYear++;
+        this.currentMonth = 0;
+        this.currentYear++;
     } else if (this.currentMonth < 0) {
-      this.currentMonth = 11;
-      this.currentYear--;
+        this.currentMonth = 11;
+        this.currentYear--;
     }
     this.daysInMonth = this.getDaysInMonth(this.currentMonth, this.currentYear);
     this.updateSelectedDay();
+    this.loadTasks();
   }
 
   updateSelectedDay() {
@@ -303,27 +303,24 @@ loadTasks() {
 
   openModal(day: number | { date: number; dayName: string }) {
     let selectedDate: Date;
-    
+
     if (typeof day === 'number') {
-      // Si day es un número, asumimos que es el día del mes actual
-      selectedDate = new Date(this.currentYear, this.currentMonth, day);
+        // Si day es un número, asumimos que es el día del mes actual
+        selectedDate = new Date(this.currentYear, this.currentMonth, day);
     } else {
-      // Si day es un objeto, creamos una nueva fecha con el año, mes y día actuales
-      const currentDate = new Date();
-      selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day.date);
+        // Si day es un objeto, creamos una nueva fecha con el año, mes y día actuales
+        selectedDate = new Date(this.currentYear, this.currentMonth, day.date);
     }
 
     this.selectedDay = {
-      date: selectedDate.getTime(),
-      dayName: this.getDayName(selectedDate)
+        date: selectedDate.getTime(),
+        dayName: this.getDayName(selectedDate)
     };
 
-    console.log('Día seleccionado en openModal:', this.selectedDay);
-    console.log('Fecha correspondiente:', new Date(this.selectedDay.date));
-    
-    this.loadTasks();
+    this.loadTasks();  // Cargar las tareas del día seleccionado
     this.isModalOpen = true;
   }
+
 
   closeModal() {
     this.isModalOpen = false; // Cerrar el modal
