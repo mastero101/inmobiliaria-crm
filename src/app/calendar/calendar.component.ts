@@ -64,27 +64,28 @@ export class CalendarComponent implements OnInit {
     this.openModal(selectedDay);
   }
 
-  loadTasks() {
+loadTasks() {
+  if (this.selectedDay) {
+    const selectedDate = new Date(this.selectedDay.date);
+    const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+    const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 23, 59, 59, 999);
+
     this.eventosService.getEventos().then(tasks => {
-      this.selectedTasks = tasks.map((task: Task) => {
-        const fechaInicio = new Date(task.fechaInicio);
-        const fechaFin = new Date(task.fechaFin);
-        
-        if (this.selectedDay) {
-          const selectedDate = new Date(this.selectedDay.date);
-          fechaInicio.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-          fechaFin.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-        }
-        
-        return {
-          ...task,
-          fechaInicio,
-          fechaFin
-        };
-      });
-      console.log('Tareas cargadas:', this.selectedTasks);
+      this.selectedTasks = tasks.filter((task: Task) => {
+        const taskStart = new Date(task.fechaInicio);
+        return taskStart >= startOfDay && taskStart <= endOfDay;
+      }).map((task: Task) => ({
+        ...task,
+        fechaInicio: new Date(task.fechaInicio),
+        fechaFin: new Date(task.fechaFin)
+      }));
+      console.log('Tareas cargadas para', this.formatSelectedDate(), ':', this.selectedTasks);
     }).catch(error => console.error('Error al cargar tareas:', error));
+  } else {
+    console.warn('No hay día seleccionado, no se pueden cargar las tareas.');
+    this.selectedTasks = [];
   }
+}
 
   saveTasks() {
   }
