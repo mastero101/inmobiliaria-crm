@@ -62,11 +62,30 @@
         </ul>
 
         <div class="task-input">
-          <input [(ngModel)]="newTask.titulo" placeholder="Título" required />
-          <input [(ngModel)]="newTask.descripcion" placeholder="Descripción" />
-          <input type="time" [(ngModel)]="newTask.fechaInicio" placeholder="Hora de inicio" required />
-          <input type="time" [(ngModel)]="newTask.fechaFin" placeholder="Hora de fin" required />
-          <input [(ngModel)]="newTask.ubicacion" placeholder="Ubicación" />
+          <mat-form-field appearance="fill">
+            <mat-label>Título</mat-label>
+            <input matInput [(ngModel)]="newTask.titulo" required />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Descripción</mat-label>
+            <input matInput [(ngModel)]="newTask.descripcion" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Hora de inicio</mat-label>
+            <input matInput [ngxTimepicker]="pickerInicio" [(ngModel)]="newTask.fechaInicio" required />
+            <ngx-material-timepicker-toggle matSuffix [for]="pickerInicio"></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #pickerInicio></ngx-material-timepicker>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Hora de fin</mat-label>
+            <input matInput [ngxTimepicker]="pickerFin" [(ngModel)]="newTask.fechaFin" required />
+            <ngx-material-timepicker-toggle matSuffix [for]="pickerFin"></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #pickerFin></ngx-material-timepicker>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Ubicación</mat-label>
+            <input matInput [(ngModel)]="newTask.ubicacion" />
+          </mat-form-field>
         </div>
         
         <div class="button-container">

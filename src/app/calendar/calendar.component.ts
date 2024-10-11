@@ -2,6 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EventosService } from '../services/eventos.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 interface Task {
   id?: number;
@@ -17,7 +20,10 @@ interface Task {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    NgxMaterialTimepickerModule
   ],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
