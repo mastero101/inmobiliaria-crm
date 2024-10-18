@@ -4,6 +4,10 @@
                [ngClass]="{'expanded': isExpanded, 'collapsed': !isExpanded}"
                class="sidenav">
     <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        <span *ngIf="isExpanded">Dashboard</span>
+      </a>
       <a mat-list-item routerLink="/clientes" routerLinkActive="active">
         <mat-icon>people</mat-icon>
         <span *ngIf="isExpanded">Clientes</span>
