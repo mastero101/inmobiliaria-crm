@@ -13,6 +13,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage: string | null = null; // Mensaje de error
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
@@ -29,7 +30,7 @@ export class LoginComponent {
         console.log('Inicio de sesión exitoso');
       } else {
         // Manejar error de inicio de sesión
-        console.log('Credenciales incorrectas');
+        this.errorMessage = 'Credenciales incorrectas'; 
       }
     }
   }

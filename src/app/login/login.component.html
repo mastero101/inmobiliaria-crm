@@ -17,6 +17,9 @@
         <small *ngIf="loginForm.get('password')?.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres.</small>
       </div>
     </div>
+    <div *ngIf="errorMessage" class="error-message">
+      <small>{{ errorMessage }}</small>
+    </div>
     <button type="submit" [disabled]="loginForm.invalid">Iniciar Sesión</button>
   </form>
 </div>

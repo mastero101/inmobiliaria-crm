@@ -15,9 +15,10 @@ export class AuthService {
       if (typeof window !== 'undefined') {
         localStorage.setItem(this.tokenKey, token); // Almacena el token en localStorage
       }
-      this.router.navigate(['/clientes']); 
+      this.router.navigate(['/dashboard']); 
+      return true; // Inicio de sesión exitoso
     }
-    return false;
+    return false; // Credenciales incorrectas
   }
 
   logout(): void {

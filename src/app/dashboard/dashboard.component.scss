@@ -1,0 +1,134 @@
+.dashboard {
+    padding: 20px;
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .dashboard-grid {
+        display: flex;
+        flex-direction: column;
+
+        @media screen and (min-width: 1024px) {
+            flex-direction: row;
+        }
+    }
+
+    .main-charts {
+        width: 100%;
+
+        @media screen and (min-width: 1024px) {
+            width: 70%;
+            padding-right: 20px;
+        }
+    }
+
+    .side-info {
+        width: 100%;
+
+        @media screen and (min-width: 1024px) {
+            width: 30%;
+        }
+    }
+
+    .chart-card {
+        margin-bottom: 30px;
+    }
+
+    .full-width-card {
+        margin-bottom: 30px;
+    }
+
+    .internal-notices {
+        list-style-type: none;
+        padding: 0;
+
+        li {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+
+            .date {
+                font-size: 0.8rem;
+                color: #666;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            p {
+                margin: 0;
+            }
+
+            &.priority-alta {
+                background-color: rgba(255, 0, 0, 0.1);
+                border-left: 3px solid red;
+            }
+
+            &.priority-media {
+                background-color: rgba(255, 165, 0, 0.1);
+                border-left: 3px solid orange;
+            }
+
+            &.priority-baja {
+                background-color: rgba(0, 128, 0, 0.1);
+                border-left: 3px solid green;
+            }
+        }
+    }
+
+    .module-status-summary, .recent-clients, .urgent-properties {
+        margin-bottom: 30px;
+        margin-top: 30px;
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+
+            li {
+                margin-bottom: 10px;
+                padding: 5px 0;
+            }
+        }
+
+        &:not(:last-child) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+        }
+    }
+
+    .status-activo {
+        color: green;
+        font-weight: bold;
+    }
+
+    .status-inactivo {
+        color: red;
+        font-weight: bold;
+    }
+
+    :host ::ng-deep {
+        .p-card {
+            margin-bottom: 1rem;
+        }
+
+        .p-card-content {
+            padding: 0.5rem;
+
+            @media screen and (min-width: 768px) {
+                padding: 1rem;
+            }
+        }
+
+        .p-chart {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 300px;
+        }
+    }
+}

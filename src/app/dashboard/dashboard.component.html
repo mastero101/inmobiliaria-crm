@@ -1,0 +1,64 @@
+<div class="dashboard">
+    <h1>Panel de Control</h1>
+    
+    <div class="dashboard-grid">
+        <div class="main-charts">
+            <p-card header="Ventas Mensuales" class="chart-card">
+                <p-chart type="bar" [data]="barChartData" [options]="chartOptions"></p-chart>
+            </p-card>
+
+            <p-card header="Distribución de Propiedades" class="chart-card">
+                <p-chart type="pie" [data]="pieChartData" [options]="chartOptions"></p-chart>
+            </p-card>
+        </div>
+
+        <div class="side-info">
+            <p-card header="Avisos Internos" class="full-width-card">
+                <p-scrollPanel [style]="{width: '100%', height: '200px'}">
+                  <ul class="internal-notices">
+                    @for (notice of internalNotices; track notice.id) {
+                      <li [class]="'priority-' + notice.priority">
+                        <span class="date">{{ notice.date }}</span>
+                        <p>{{ notice.message }}</p>
+                      </li>
+                    }
+                  </ul>
+                </p-scrollPanel>
+            </p-card>
+
+            <p-card class="full-width-card">
+                <div class="module-status-summary">
+                    <h3>Estado de Módulos</h3>
+                    <ul>
+                        @for (module of moduleStatuses; track module.name) {
+                            <li>
+                                {{ module.name }}: 
+                                <span [class]="'status-' + module.status.toLowerCase()">
+                                    {{ module.status }}
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="recent-clients">
+                    <h3>Clientes Recientes</h3>
+                    <ul>
+                        @for (client of recentClients; track client.name) {
+                            <li>{{ client.name }} - {{ client.date }}</li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="urgent-properties">
+                    <h3>Propiedades Urgentes</h3>
+                    <ul>
+                        @for (property of urgentProperties; track property.address) {
+                            <li>{{ property.address }} - Vence: {{ property.dueDate }}</li>
+                        }
+                    </ul>
+                </div>
+            </p-card>
+        </div>
+    </div>
+</div>
